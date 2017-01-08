@@ -38,12 +38,40 @@ def findTitle(fullName):
     nameParts = fullName.split(', ')
     title = nameParts[1].split('.')
     return uniqueTitleDic[title[0]]
+    
+    
+Title_Dictionary = {    "Capt":       1,
+                        "Col":        1,
+                        "Major":      1,
+                        "Jonkheer":   2,
+                        "Don":        2,
+                        "Sir" :       2,
+                        "Dr":         3,
+                        "Rev":        3,
+                        "the Countess":2,
+                        "Dona":       2,
+                        "Mme":        4,
+                        "Mlle":       5,
+                        "Ms":         4,
+                        "Mr" :        6,
+                        "Mrs" :       4,
+                        "Miss" :      5,
+                        "Master" :    7,
+                        "Lady" :      7
+                        }
+
+def mapNameToSocialLevel(fullName):
+    nameParts = fullName.split(', ')
+    title = nameParts[1].split('.')
+    return Title_Dictionary[title[0]]                     
+
 
 dfTrain = pd.read_csv('train.csv', header=0)
 dfTrain['Sex'] = dfTrain['Sex'].map( {'female': 0, 'male': 1} ).astype(int)
 dfTrain['Embarked'] = dfTrain['Embarked'].map({'S': 0, 'C': 1, 'Q':2})
 dfTrain['Cabin'] = dfTrain['Cabin'].map(lambda strObj: mapCabin(strObj))
 dfTrain['Title'] = dfTrain['Name'].map(lambda strObj: findTitle(strObj))
+dfTrain['SocialLevel'] = dfTrain['Name'].map(lambda strObj: mapNameToSocialLevel(strObj))
 dfTrain['Name'] = dfTrain['Name'].map(lambda strObj: map2Familyname(strObj))
 
 dfTest = pd.read_csv('test.csv', header=0)
@@ -51,6 +79,7 @@ dfTest['Sex'] = dfTest['Sex'].map( {'female': 0, 'male': 1} ).astype(int)
 dfTest['Embarked'] = dfTest['Embarked'].map({'S': 0, 'C': 1, 'Q':2})
 dfTest['Cabin'] = dfTest['Cabin'].map(lambda strObj: mapCabin(strObj))
 dfTest['Title'] = dfTest['Name'].map(lambda strObj: findTitle(strObj))
+dfTest['SocialLevel'] = dfTest['Name'].map(lambda strObj: mapNameToSocialLevel(strObj))
 dfTest['Name'] = dfTest['Name'].map(lambda strObj: map2Familyname(strObj))
 
 
